@@ -42,8 +42,10 @@ class Neuron(Module):
 
 class Layer(Module):
 
-    def __init__(self, nin, nout, **kwargs):
-        self.neurons = [Neuron(nin, **kwargs) for _ in range(nout)]
+    def __init__(self, nin, nout, activation='relu'):
+        # Initialize neurons with the specified activation function
+        self.neurons = [Neuron(nin, activation=activation) for _ in range(nout)]
+
 
     def __call__(self, x):
         out = [n(x) for n in self.neurons]
@@ -57,9 +59,13 @@ class Layer(Module):
 
 class MLP(Module):
 
-    def __init__(self, nin, nouts):
+    def __init__(self, nin, nouts, activations=None):
+        # If activations not specified, default to 'relu' for all except the last layer (output layer)
+        activations = activations or ['relu'] * (len(nouts) - 1) + ['none']
+
+        # Create layers, each with its own specified activation function
         sz = [nin] + nouts
-        self.layers = [Layer(sz[i], sz[i+1], nonlin=i!=len(nouts)-1) for i in range(len(nouts))]
+        self.layers = [Layer(sz[i], sz[i+1], activation=activations[i]) for i in range(len(nouts))]
 
     def __call__(self, x):
         for layer in self.layers:
