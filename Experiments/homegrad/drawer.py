@@ -1,7 +1,7 @@
 from graphviz import Digraph
 from micrograd.engine import *
 from micrograd.nn import * 
-
+from matplotlib import pyplot as plt
 #Importing graph drawing tool
 def trace(root):
     nodes, edges = set(), set()
@@ -27,10 +27,3 @@ def draw_dot(root):
     for n1,n2 in edges:
         dot.edge(str(id(n1)), str(id(n2)) + n2._op)
     return dot
-
-x = Value(2.0, label = 'x')
-y = Value(1.0, label = 'y')
-d = x + y; d.label = 'd'
-
-
-draw_dot(d)
