@@ -61,7 +61,7 @@ class MLP(Module):
 
     def __init__(self, nin, nouts, activations=None):
         # If activations not specified, default to 'relu' for all except the last layer (output layer)
-        activations = activations or ['relu'] * (len(nouts) - 1) + ['none']
+        self. activations = activations or ['relu'] * (len(nouts) - 1) + ['none']
 
         # Create layers, each with its own specified activation function
         sz = [nin] + nouts
