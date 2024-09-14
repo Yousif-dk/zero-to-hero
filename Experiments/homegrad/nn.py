@@ -1,5 +1,5 @@
 import random
-from micrograd.engine import *
+from homegrad.engine import *
 
 class Module:
 
@@ -16,6 +16,9 @@ class Neuron(Module):
         self.w = [Value(random.uniform(-1,1)) for _ in range(nin)]
         self.b = Value(0)
         self.nonlin = nonlin
+        self.activation = activation
+        if self.activation == 'none':
+            self.nonlin = False
 
     def __call__(self, x):
         act = sum((wi*xi for wi,xi in zip(self.w, x)), self.b)
@@ -57,15 +60,18 @@ class Layer(Module):
     def __repr__(self):
         return f"Layer of [{', '.join(str(n) for n in self.neurons)}]"
 
-class MLP(Module):
+class MLPerceptron(Module):
 
     def __init__(self, nin, nouts, activations=None):
         # If activations not specified, default to 'relu' for all except the last layer (output layer)
-        self. activations = activations or ['relu'] * (len(nouts) - 1) + ['none']
+        if activations == None:
+            self.activations = ['relu'] * (len(nouts) - 1) + ['none']
+        else:
+            self.activations = activations + ['none']
 
         # Create layers, each with its own specified activation function
         sz = [nin] + nouts
-        self.layers = [Layer(sz[i], sz[i+1], activation=activations[i]) for i in range(len(nouts))]
+        self.layers = [Layer(sz[i], sz[i+1], activation=self.activations[i]) for i in range(len(nouts))]
 
     def __call__(self, x):
         for layer in self.layers:
