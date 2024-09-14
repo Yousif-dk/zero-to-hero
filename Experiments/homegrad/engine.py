@@ -44,7 +44,7 @@ class Value:
         return out
 
     def relu(self):
-        out = Value(0 if self.data < 0 else self.data, (self,), 'ReLU')
+        out = Value(0 if 0 > self.data  else self.data, (self,), 'ReLU')
 
         def _backward():
             self.grad += (out.data > 0) * out.grad
@@ -111,3 +111,55 @@ class Value:
 
     def __repr__(self):
         return f"Value(data={self.data}, grad={self.grad})"
+    
+    def __eq__(self, other):
+        if isinstance(other, Value):
+            return self.data == other.data
+        elif isinstance(other, (int, float)):
+            return self.data == other
+        else:
+            return NotImplemented
+
+    def __ne__(self, other):
+        if isinstance(other, Value):
+            return self.data != other.data
+        elif isinstance(other, (int, float)):
+            return self.data != other
+        else:
+            return NotImplemented
+
+    def __lt__(self, other):
+        if isinstance(other, Value):
+            return self.data < other.data
+        elif isinstance(other, (int, float)):
+            return self.data < other
+        else:
+            return NotImplemented
+
+    def __le__(self, other):
+        if isinstance(other, Value):
+            return self.data <= other.data
+        elif isinstance(other, (int, float)):
+            return self.data <= other
+        else:
+            return NotImplemented
+
+    def __gt__(self, other):
+        if isinstance(other, Value):
+            return self.data > other.data
+        elif isinstance(other, (int, float)):
+            return self.data > other
+        else:
+            return NotImplemented
+
+    def __ge__(self, other):
+        if isinstance(other, Value):
+            return self.data >= other.data
+        elif isinstance(other, (int, float)):
+            return self.data >= other
+        else:
+            return NotImplemented
+
+    def __hash__(self):
+        # Define a hash based on the data and label
+        return hash((self.data, self.label))
