@@ -1,6 +1,6 @@
 from graphviz import Digraph
-from micrograd.engine import *
-from micrograd.nn import * 
+from homegrad.engine import *
+from homegrad.nn import * 
 from matplotlib import pyplot as plt
 #Importing graph drawing tool
 def trace(root):
