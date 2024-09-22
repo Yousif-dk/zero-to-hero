@@ -67,7 +67,7 @@ class MLPerceptron(Module):
         if activations == None:
             self.activations = ['relu'] * (len(nouts) - 1) + ['none']
         else:
-            self.activations = activations + ['none']
+            self.activations = activations[0:len(nouts)-1] + ['none']
 
         # Create layers, each with its own specified activation function
         sz = [nin] + nouts
